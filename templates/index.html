@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema Acadêmico - IFES Colatina</title>
+  <style>
+    :root {
+      --verde: #1e7b34;
+      --verde-escuro: #14532d;
+      --verde-claro: #e8f5ec;
+      --fundo: #f1f5f2;
+      --cartao: #ffffff;
+      --texto: #14231a;
+      --texto-suave: #5b6b61;
+      --borda: #d9e3dc;
+      --vermelho: #b91c1c;
+      --vermelho-claro: #fde8e8;
+      --amarelo-claro: #fef3c7;
+      --amarelo-texto: #78350f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--verde);
+      color: #fff;
+      padding: 1.5rem;
+    }
+    .cabecalho {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      height: 64px;
+      width: auto;
+      justify-self: start;
+    }
+    .titulo { text-align: center; }
+    header h1 { margin: 0; font-size: 1.7rem; }
+    header p { margin: .2rem 0 0; opacity: .9; }
+
+    main {
+      max-width: 960px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1rem;
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .msg {
+      padding: .8rem 1rem;
+      border-radius: 10px;
+      font-weight: 500;
+      border-left: 4px solid;
+    }
+    .msg.ok { background: var(--verde-claro); border-color: var(--verde); color: var(--verde-escuro); }
+    .msg.erro { background: var(--vermelho-claro); border-color: var(--vermelho); color: #7f1d1d; }
+
+    .cartao {
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+    .cartao-topo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .numero {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--verde);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+    h2 { margin: 0; font-size: 1.15rem; color: var(--verde-escuro); }
+    .contador {
+      margin-left: auto;
+      background: var(--verde-claro);
+      color: var(--verde-escuro);
+      padding: .2rem .7rem;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .grade-campos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--texto-suave);
+      margin-bottom: .3rem;
+    }
+
+    input {
+      width: 100%;
+      padding: .65rem .8rem;
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      font: inherit;
+      background: #fff;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(30,123,52,.18);
+    }
+
+    .botao {
+      margin-top: 1rem;
+      background: var(--verde);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .7rem 1.2rem;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .botao:hover { background: var(--verde-escuro); }
+    .botao.secundario {
+      background: #fff;
+      color: var(--verde-escuro);
+      border: 1px solid var(--verde);
+    }
+    .botao.secundario:hover { background: var(--verde-claro); }
+
+    .vazio {
+      color: var(--texto-suave);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .lista-disciplinas {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .lista-disciplinas li {
+      background: var(--verde-claro);
+      color: var(--verde-escuro);
+      padding: .35rem .8rem;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .grade-notas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: .7rem .6rem;
+      border-bottom: 1px solid var(--borda);
+    }
+    th {
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--texto-suave);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .badge.distincao { background: var(--verde-escuro); color: #fff; }
+    .badge.aprovado { background: var(--verde-claro); color: var(--verde-escuro); }
+    .badge.reprovado { background: var(--vermelho-claro); color: #991b1b; }
+
+    .situacao-final {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .situacao-final.direto { background: var(--verde); color: #fff; }
+    .situacao-final.dependencia { background: var(--amarelo-claro); color: var(--amarelo-texto); }
+    .situacao-final.retido { background: var(--vermelho); color: #fff; }
+
+    @media (max-width: 600px) {
+      .cabecalho { grid-template-columns: 1fr; justify-items: center; }
+      .logo { height: 52px; justify-self: center; }
+      header h1 { font-size: 1.4rem; }
+      .cartao { padding: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="cabecalho">
+      <img src="{{ url_for('static', filename='ifes.png') }}" alt="Instituto Federal do Espírito Santo - Campus Colatina" class="logo">
+      <div class="titulo">
+        <h1>Sistema Acadêmico</h1>
+        <p>Cadastro de estudantes, disciplinas e notas</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% for categoria, texto in mensagens %}
+        <div class="msg {{ categoria }}">{{ texto }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- 1. Estudante -->
+    <section class="cartao">
+      <div class="cartao-topo">
+        <span class="numero">1</span>
+        <h2>Estudante</h2>
+      </div>
+
+      {% if tem_estudante %}
+        <div class="grade-campos">
+          {% for rotulo, valor in dados %}
+            <div>
+              <label>{{ rotulo }}</label>
+              <div>{{ valor }}</div>
+            </div>
+          {% endfor %}
+        </div>
+        <form method="post" action="{{ url_for('novo') }}">
+          <button class="botao secundario" type="submit">Novo estudante</button>
+        </form>
+      {% else %}
+        <form method="post" action="{{ url_for('post_estudante') }}">
+          <div class="grade-campos">
+            <div>
+              <label for="nome">Nome</label>
+              <input id="nome" name="nome" required>
+            </div>
+            <div>
+              <label for="matricula">Matrícula (13 caracteres)</label>
+              <input id="matricula" name="matricula" maxlength="13" required>
+            </div>
+            <div>
+              <label for="curso">Curso (TIPI, EDF, ADM ou MA)</label>
+              <input id="curso" name="curso" required>
+            </div>
+            <div>
+              <label for="turma">Turma (ex.: M08)</label>
+              <input id="turma" name="turma" required>
+            </div>
+            <div>
+              <label for="cpf">CPF</label>
+              <input id="cpf" name="cpf" required>
+            </div>
+          </div>
+          <button class="botao" type="submit">Cadastrar estudante</button>
+        </form>
+      {% endif %}
+    </section>
+
+    <!-- 2. Disciplinas -->
+    <section class="cartao">
+      <div class="cartao-topo">
+        <span class="numero">2</span>
+        <h2>Disciplinas</h2>
+        <span class="contador">{{ disciplinas|length }}/{{ limite }}</span>
+      </div>
+
+      {% if tem_estudante and disciplinas|length < limite and not notas_lancadas %}
+        <form method="post" action="{{ url_for('post_disciplina') }}">
+          <label for="disciplina">Nome da disciplina</label>
+          <input id="disciplina" name="disciplina" required>
+          <button class="botao" type="submit">Adicionar disciplina</button>
+        </form>
+      {% endif %}
+
+      {% if disciplinas %}
+        <ul class="lista-disciplinas">
+          {% for d in disciplinas %}<li>{{ d }}</li>{% endfor %}
+        </ul>
+      {% else %}
+        <p class="vazio" style="margin-top:1rem">Nenhuma disciplina cadastrada.</p>
+      {% endif %}
+    </section>
+
+    <!-- 3. Notas -->
+    <section class="cartao">
+      <div class="cartao-topo">
+        <span class="numero">3</span>
+        <h2>Notas finais</h2>
+      </div>
+
+      {% if notas_lancadas %}
+        <p class="vazio">Notas já lançadas.</p>
+      {% elif tem_estudante and disciplinas|length == limite %}
+        <form method="post" action="{{ url_for('post_notas') }}">
+          <div class="grade-notas">
+            {% for d in disciplinas %}
+              <div>
+                <label>{{ d }}</label>
+                <input name="nota_{{ loop.index0 }}" type="text" inputmode="decimal" placeholder="0 a 10" required>
+              </div>
+            {% endfor %}
+          </div>
+          <button class="botao" type="submit">Salvar notas</button>
+        </form>
+      {% else %}
+        <p class="vazio">Cadastre o estudante e as {{ limite }} disciplinas para lançar as notas.</p>
+      {% endif %}
+    </section>
+
+    <!-- 4. Ficha -->
+    <section class="cartao">
+      <div class="cartao-topo">
+        <span class="numero">4</span>
+        <h2>Ficha acadêmica</h2>
+      </div>
+
+      {% if notas_lancadas %}
+        <table>
+          <thead>
+            <tr><th>Disciplina</th><th>Nota</th><th>Situação</th></tr>
+          </thead>
+          <tbody>
+            {% for d, nota, situacao in linhas %}
+              <tr>
+                <td>{{ d }}</td>
+                <td><strong>{{ nota }}</strong></td>
+                <td>
+                  {% if 'distinção' in situacao %}
+                    <span class="badge distincao">{{ situacao }}</span>
+                  {% elif situacao == 'Aprovado' %}
+                    <span class="badge aprovado">{{ situacao }}</span>
+                  {% else %}
+                    <span class="badge reprovado">{{ situacao }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="situacao-final
+          {% if situacao_final == 'Retido' %}retido
+          {% elif 'dependência' in situacao_final %}dependencia
+          {% else %}direto{% endif %}">
+          Situação final: {{ situacao_final }}
+        </div>
+      {% else %}
+        <p class="vazio">A ficha aparece depois que as notas forem lançadas.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
